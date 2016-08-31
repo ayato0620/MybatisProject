@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mybatis.mappers.DeptMapper">
+    <resultMap id="dept" type="com.mybatis.entity.Dept">
+        <id column="deptno" property="deptno" jdbcType="INTEGER"/>
+        <result column="dname" property="dname" jdbcType="VARCHAR"/>
+        <result column="loc" property="loc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="deptEmpResultMap" type="com.mybatis.entity.Dept" extends="dept">
+        <collection property="list" javaType="List" ofType="com.mybatis.entity.Emp">
+            <id column="empno" property="empno" jdbcType="INTEGER"/>
+            <result column="ename" property="ename" jdbcType="VARCHAR"/>
+            <result column="job" property="job" jdbcType="VARCHAR"/>
+            <result column="sal" property="sal" jdbcType="FLOAT"/>
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="deptJobResultMap" type="com.mybatis.entity.Dept" extends="dept">
+        <collection property="jobList" javaType="List" ofType="com.mybatis.entity.Job">
+            <id column="jobno" property="jobno" jdbcType="INTEGER"/>
+            <result column="job" property="job" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="findDeptEmpByDeptId" parameterType="int" resultMap="deptEmpResultMap">
+        select dept.*,emp.ename,emp.empno,emp.job,emp.sal from dept join emp on dept.deptno=emp.deptno where dept.deptno=#{id}
+    </select>
+
+    <select id="findDeptJobByDeptId" parameterType="int" resultMap="deptJobResultMap">
+        select dept.* ,job.* from dept join deptjob on dept.deptno=deptjob.deptno join job on job.jobno=deptjob.jobno where dept.deptno=#{id}
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mybatis.mappers.EmpMapper">
+    <resultMap id="empResultMap" type="com.mybatis.entity.Emp">
+        <id column="empno" property="empno" jdbcType="INTEGER"/>
+        <result column="ename" property="ename" jdbcType="VARCHAR"/>
+        <result column="job" property="job" jdbcType="VARCHAR"/>
+        <result column="sal" property="sal" jdbcType="FLOAT"/>
+        <association property="dept" javaType="com.mybatis.entity.Dept">
+            <id column="deptno" property="deptno" jdbcType="INTEGER"/>
+            <result column="dname" property="dname" jdbcType="VARCHAR"/>
+            <result column="loc" property="loc" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="findEmpDeptByEmpId" parameterType="int" resultMap="empResultMap">
+        select dept.*,emp.ename,emp.empno,emp.job,emp.sal from dept join emp on dept.deptno=emp.deptno where emp.empno=#{id}
+    </select>
+
+</mapper>
